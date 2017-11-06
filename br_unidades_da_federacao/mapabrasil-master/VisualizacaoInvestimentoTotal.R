@@ -75,8 +75,8 @@ pal <- colorBin("YlGn",domain = oi ,n = 9)#max(novo$Invest_estado)) #cores do ma
 print(pal(brasileiropg$Invest_estado))
 state_popup <- paste0("<strong>Estado: </strong>", 
                       brasileiropg$NM_ESTADO,
-                      "<br><strong>Investimento Total: </strong>", 
-                      brasileiropg$Invest_estado,
+                      "<br><strong>Investimento Total: R$</strong>", 
+                      format(brasileiropg$Invest_estado, decimal.mark=",",big.mark=".", small.interval=2, nsmall =2),
                       "<br><strong>Obras Realizadas: </strong>", 
                       brasileiropg$Obras,
                       "<br><strong>Obras Sem Valor Divulgado: </strong>", 
