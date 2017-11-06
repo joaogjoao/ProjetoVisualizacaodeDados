@@ -11,10 +11,8 @@ library(readr)
 # Importando dataset----
 df <- read_csv("~/Documentos/Faculdade/2017-2/VD/Projeto/ProjetoVisualizacaodeDados/br_unidades_da_federacao/mapabrasil-master/PAC_2017_06.csv")
 
-
-df$concluida = 0
-
 #coloca 1 onde é conlcuida
+df$concluida = 0
 for(i in 1:nrow(df)){
   if(df$idn_estagio[i] == 90){
     df$concluida[i] = 1
@@ -37,29 +35,28 @@ novo <- novo %>%
   group_by(dsc_orgao) %>%
   summarise(nroObras = max(cumsum),nroCompletas = max(concluida))
 
-
-
+novo$nroIncompletas = 0
+novo$nroIncompletas = novo$nroObras - novo$nroCompletas
 novo$dsc_orgao[1] = "Ministerio da Ciencia"
-# data <- data.frame(novo$dsc_orgao, novo$nroObras, novo$nroCompletas)
-# Encoding(novo$dsc_orgao)
-# p <- plot_ly(data, orientation = 'h', x = ~novo$dsc_orgao, y = ~novo$nroObras, type = 'bar', name = 'Obras em andamento') %>%
-#   add_trace(x = ~novo$nroCompletas, name = 'Obras Concluidas') %>%
-#   layout(yaxis = list(title = 'Total De Obras'), xaxis = list(title = "Ministerio"),barmode = 'stack')
-# 
+data <- data.frame(novo$dsc_orgao, novo$nroIncompletas, novo$nroCompletas)
 
-data <- data.frame(novo$dsc_orgao, novo$nroObras, novo$nroCompletas)
-
-p <- plot_ly(data, x = ~novo$nroObras, y = ~novo$dsc_orgao, type = 'bar', orientation = 'h', name = 'Concluidas',
-             marker = list(color = 'rgba(246, 78, 139, 0.6)',
-                           line = list(color = 'rgba(246, 78, 139, 1.0)',
-                                       width = 3))) %>%
+p <- plot_ly(data, x = ~novo$nroIncompletas, y = ~novo$dsc_orgao, type = 'bar', orientation = 'h', name = 'Concluidas',
+             marker = list(color = 'rgba(246, 50, 50, 0.5)',
+                           line = list(color = 'rgba(255, 50, 50, 1.0)',
+                                       width = 1))) %>%
   add_trace(x = ~novo$nroCompletas, name = 'Incompletas',
-            marker = list(color = 'rgba(58, 71, 80, 0.6)',
+            marker = list(color = 'rgba(58, 71, 80, 0.5)',
                           line = list(color = 'rgba(58, 71, 80, 1.0)',
-                                      width = 3))) %>%
-  layout(barmode = 'stack',
+                                      width = 1))) %>%
+   add_trace(x = ~novo$nroObras, name = 'Total de Obras',
+             marker = list(color = 'rgba(255, 255, 255, 0)',
+                           line = list(color = 'rgba(255, 255, 2, 0)',
+                                       width = 0.1))) %>%
+  layout(margin = list(l = 400, r = 0, b = 50, t = 0, pad = 4),
+        barmode = 'stack',
          yaxis = list(title = ""),
-         xaxis = list(title ="Quantidade de Obras"))
+         xaxis = list(title ="Quantidade de Obras")
+         )
 p
 
 
